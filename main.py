@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from routes.user_routes import router as user_router
+from routes.meal_routes import router as meal_router
 from db import get_db,DATABASE_URL
 from sqlalchemy import create_engine
 from models import Base
@@ -7,6 +8,7 @@ app = FastAPI()
 
 
 app.include_router(user_router)
+app.include_router(meal_router)
 
 #to create database
 
@@ -16,6 +18,8 @@ Base.metadata.create_all(engine)
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+
+
 
 
 
