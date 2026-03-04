@@ -8,6 +8,7 @@ from datetime import date
 from db import engine
 
 
+
 class User(Base):
     __tablename__ = "users"
 
@@ -16,6 +17,7 @@ class User(Base):
     email = Column(String, unique=True)
     hashed_password = Column(String)
     meals = relationship("Meal", back_populates="user", cascade="all, delete")
+    workouts = relationship("Workout", back_populates="user", cascade="all, delete")
 
 class Meal(Base):
     __tablename__ = "meals"
@@ -31,4 +33,20 @@ class Meal(Base):
     user = relationship("User", back_populates="meals")
 
 
+Base.metadata.create_all(bind=engine)
+
+class Workout(Base):
+    __tablename__ = "workouts"
+
+    id = Column(Integer, primary_key=True, index=True)
+    exercise_name = Column(String, nullable=False)
+    sets = Column(Integer)
+    reps = Column(Integer)
+    weight = Column(Integer)
+
+    user_id = Column(Integer, ForeignKey("users.id"))
+
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", back_populates="workouts")
 Base.metadata.create_all(bind=engine)
