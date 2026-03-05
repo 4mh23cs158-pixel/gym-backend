@@ -18,6 +18,7 @@ class User(Base):
     hashed_password = Column(String)
     meals = relationship("Meal", back_populates="user", cascade="all, delete")
     workouts = relationship("Workout", back_populates="user", cascade="all, delete")
+    goals = relationship("Goal", back_populates="user", cascade="all, delete")
 
 class Meal(Base):
     __tablename__ = "meals"
@@ -49,4 +50,16 @@ class Workout(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="workouts")
+Base.metadata.create_all(bind=engine)
+
+class Goal(Base):
+    __tablename__ = "goals"
+
+    id = Column(Integer, primary_key=True, index=True)
+    calorie_goal = Column(Integer)
+    protein_goal = Column(Integer)
+    workout_goal = Column(Integer)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    created_at = Column(DateTime, default=datetime.utcnow)
+    user = relationship("User", back_populates="goals")
 Base.metadata.create_all(bind=engine)
