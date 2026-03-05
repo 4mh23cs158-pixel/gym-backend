@@ -6,7 +6,18 @@ from routes.goal_routes import router as goal_router
 from db import get_db,DATABASE_URL
 from sqlalchemy import create_engine
 from models import Base
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 app.include_router(user_router)

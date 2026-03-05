@@ -5,7 +5,7 @@ from models import User
 from repositories.user_repo import UserRepo
 from schemas.user_schemas import UserSchema
 from schemas.Token_schemas import Token, LoginRequest
-from utils.auth import get_password_hash, verify_password, create_access_token
+from utils.auth import get_password_hash, verify_password, create_access_token, get_current_user
 
 router = APIRouter()
 
@@ -44,3 +44,7 @@ def login(credentials: LoginRequest, db: Session = Depends(get_db)):
 @router.post("/logout")
 def logout():
     return {"message": "User logged out successfully"}
+
+@router.get("/users/me", response_model=UserSchema)
+def read_users_me(current_user: User = Depends(get_current_user)):
+    return current_user
